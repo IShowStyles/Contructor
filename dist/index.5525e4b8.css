@@ -26,4 +26,13 @@ blockquote {
   padding: 0 !important;
 }
 
+.link {
+  width: 25px;
+  height: 25px;
+}
+
+.link:not(:last-child) {
+  margin-right: 12px;
+}
+
 /*# sourceMappingURL=index.5525e4b8.css.map */

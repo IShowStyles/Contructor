@@ -21,8 +21,6 @@ function columns (block){
 
     const html =  block.value.map(col).join('')
 
-    console.log(styles)
-
     return row(html ,css(styles))
 }
 
@@ -34,7 +32,10 @@ function image(block){
 
 function footer(block){
     const {tag1 ='p',tag2 ='p',styles } = block.options
-    return row(col(`<${tag1}>${block.value}</${tag1}>`),css(styles));
+
+
+   const html = block.value.map(col).join('')
+   return row(html ,css(styles))
 
 
 }

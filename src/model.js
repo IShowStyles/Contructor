@@ -3,6 +3,7 @@ import {TitleBlock,FooterBlock,ColumnsBlock,TextBlock,ImageBlock} from './classe
 const text = `<blockquote>goals should never be simple</blockquote>` ;
 const link = ` <i>Follow me on GitHub for more apps <a href="https://github.com/OGBeas222" target="_blank">(git)</a></i>  `
 
+const telegram   = `<a href="https://www.instagram.com/alexssandr_andreevich/?igshid=YmMyMTA2M2Y=" class="link"><i class="bi bi-instagram"></i></a><a href="https://t.me/zholudev111" class="link"><i class="bi bi-telegram"></i></a>`
 export const model = [
 
     new TitleBlock('constructor on JS from Alex',{
@@ -77,10 +78,11 @@ export const model = [
 
 
 
-    new ColumnsBlock([
+    new FooterBlock([
+        telegram,
         '',
-        'Oh,sun is shine',
-        'The sky is blue'
+        'goals should never be simple',
+
     ],{
 
         tag1: 'i',

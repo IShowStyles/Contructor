@@ -504,15 +504,11 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"8lqZg":[function(require,module,exports) {
 var _model = require("./model");
-var _template = require("./template");
+var _app = require("./classes/app");
 var _mainCss = require("./styles/main.css");
-const $site = document.querySelector("#site");
-(0, _model.model).forEach((block)=>{
-    const toHTML = (0, _template.templates)[block.type];
-    if (toHTML) $site.insertAdjacentHTML("beforeend", toHTML(block));
-});
+new (0, _app.App)((0, _model.model)).init();
 
-},{"./model":"dEDha","./template":"iBEJI","./styles/main.css":"clPKd"}],"dEDha":[function(require,module,exports) {
+},{"./model":"dEDha","./styles/main.css":"clPKd","./classes/app":"g9LQJ"}],"dEDha":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "model", ()=>model);
@@ -521,6 +517,7 @@ var _imgBgJpgDefault = parcelHelpers.interopDefault(_imgBgJpg);
 var _blocks = require("./classes/blocks");
 const text = `<blockquote>goals should never be simple</blockquote>`;
 const link = ` <i>Follow me on GitHub for more apps <a href="https://github.com/OGBeas222" target="_blank">(git)</a></i>  `;
+const telegram = `<a href="https://www.instagram.com/alexssandr_andreevich/?igshid=YmMyMTA2M2Y=" class="link"><i class="bi bi-instagram"></i></a><a href="https://t.me/zholudev111" class="link"><i class="bi bi-telegram"></i></a>`;
 const model = [
     new (0, _blocks.TitleBlock)("constructor on JS from Alex", {
         tag: "h1",
@@ -583,10 +580,10 @@ const model = [
             "border-bottom-right-radius": "9px"
         }
     }),
-    new (0, _blocks.ColumnsBlock)([
+    new (0, _blocks.FooterBlock)([
+        telegram,
         "",
-        "Oh,sun is shine",
-        "The sky is blue"
+        "goals should never be simple", 
     ], {
         tag1: "i",
         tag2: "small",
@@ -686,9 +683,9 @@ parcelHelpers.export(exports, "ImageBlock", ()=>ImageBlock);
 parcelHelpers.export(exports, "ColumnsBlock", ()=>ColumnsBlock);
 parcelHelpers.export(exports, "TextBlock", ()=>TextBlock);
 parcelHelpers.export(exports, "FooterBlock", ()=>FooterBlock);
+var _utilies = require("../utilies");
 class Block {
-    constructor(type, value, options){
-        this.type = type;
+    constructor(value, options){
         this.value = value;
         this.options = options;
     }
@@ -698,71 +695,59 @@ class Block {
 }
 class TitleBlock extends Block {
     constructor(value, options){
-        super("title", value, options);
+        super(value, options);
+    }
+    toHTML() {
+        const { tag ="h1" , styles  } = this.options;
+        return (0, _utilies.row)((0, _utilies.col)(`<${tag}>${this.value}<${tag}>`), (0, _utilies.css)(styles));
     }
 }
 class ImageBlock extends Block {
     constructor(value, options){
-        super("image", value, options);
+        super(value, options);
+    }
+    toHTML() {
+        const { imgStyles: is , alt  } = this.options;
+        return (0, _utilies.row)(`<img  src="${this.value}" style="${(0, _utilies.css)(is)}" alt="${alt}">`);
     }
 }
 class ColumnsBlock extends Block {
     constructor(value, options){
-        super("columns", value, options);
+        super(value, options);
+    }
+    toHTML() {
+        const { styles  } = this.options;
+        const html = this.value.map((0, _utilies.col)).join("");
+        return (0, _utilies.row)(html, (0, _utilies.css)(styles));
     }
 }
 class TextBlock extends Block {
     constructor(value, options){
-        super("text", value, options);
+        super(value, options);
+    }
+    toHTML() {
+        const { tag1 ="p" , styles , tag2 ="p" , blockquote  } = this.options;
+        return (0, _utilies.row)((0, _utilies.col)(`${this.value}`), (0, _utilies.css)(styles));
     }
 }
 class FooterBlock extends Block {
     constructor(value, options){
-        super("footer", value, options);
+        super(value, options);
+    }
+    toHTML() {
+        const { tag1 ="p" , tag2 ="p" , styles  } = this.options;
+        const html = this.value.map((0, _utilies.col)).join("");
+        return (0, _utilies.row)(html, (0, _utilies.css)(styles));
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iBEJI":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "templates", ()=>templates);
-var _utilies = require("./utilies");
-function title(block) {
-    const { tag ="h1" , styles  } = block.options;
-    return (0, _utilies.row)((0, _utilies.col)(`<${tag}>${block.value}<${tag}>`), (0, _utilies.css)(styles));
-}
-function text(block) {
-    const { tag1 ="p" , styles , tag2 ="p" , blockquote  } = block.options;
-    return (0, _utilies.row)((0, _utilies.col)(`${block.value}`), (0, _utilies.css)(styles));
-}
-function columns(block) {
-    const { styles  } = block.options;
-    const html = block.value.map((0, _utilies.col)).join("");
-    console.log(styles);
-    return (0, _utilies.row)(html, (0, _utilies.css)(styles));
-}
-function image(block) {
-    const { imgStyles: is , alt  } = block.options;
-    return (0, _utilies.row)(`<img  src="${block.value}" style="${(0, _utilies.css)(is)}" alt="${alt}">`);
-}
-function footer(block) {
-    const { tag1 ="p" , tag2 ="p" , styles  } = block.options;
-    return (0, _utilies.row)((0, _utilies.col)(`<${tag1}>${block.value}</${tag1}>`), (0, _utilies.css)(styles));
-}
-const templates = {
-    title,
-    text,
-    columns,
-    image,
-    footer
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./utilies":"a1j0Y"}],"a1j0Y":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../utilies":"a1j0Y"}],"a1j0Y":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "row", ()=>row);
 parcelHelpers.export(exports, "col", ()=>col);
 parcelHelpers.export(exports, "css", ()=>css);
+parcelHelpers.export(exports, "block", ()=>block);
 function row(content, styles = "") {
     return `<div class="row" style="${styles}">${content}</div>`;
 }
@@ -770,10 +755,99 @@ function col(content) {
     return `<div class="col">${content}</div>`;
 }
 function css(styles = {}) {
+    if (typeof styles === "string") return styles;
     const string = (key)=>`${key}: ${styles[key]}`;
     return Object.keys(styles).map(string).join(";");
 }
+function block(type) {
+    return `
+    <form name="${type}">
+      <h5>${type}</h5>
+      <div class="form-group">
+        <input class="form-control form-control-sm" name="value" placeholder="value">
+      </div>
+      <div class="form-group">
+        <input class="form-control form-control-sm" name="styles" placeholder="styles">
+      </div>
+      <button type="submit" class="btn btn-primary btn-sm">Добавить</button>
+    </form>
+    <hr />
+  `;
+}
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"clPKd":[function() {},{}]},["1RB6v","8lqZg"], "8lqZg", "parcelRequire5634")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"clPKd":[function() {},{}],"g9LQJ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "App", ()=>App);
+var _site = require("./site");
+var _model = require("../model");
+var _sidebar = require("./sidebar");
+class App {
+    constructor(model){
+        this.model = model;
+    }
+    init() {
+        const site = new (0, _site.Site)("#site");
+        const updateCallback = (newBlock)=>{
+            site.render(this.model);
+        };
+        site.render(this.model);
+        new (0, _sidebar.Sidebar)("#panel", updateCallback);
+    }
+}
+
+},{"./site":"24VTm","../model":"dEDha","./sidebar":"5YCBk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"24VTm":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Site", ()=>Site);
+class Site {
+    constructor(selector){
+        this.$el = document.querySelector(selector);
+    }
+    render(model) {
+        this.$el.innerHTML = "";
+        model.forEach((block)=>{
+            this.$el.insertAdjacentHTML("beforeend", block.toHTML());
+        });
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5YCBk":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Sidebar", ()=>Sidebar);
+var _utilies = require("../utilies");
+var _blocks = require("./blocks");
+class Sidebar {
+    constructor(selector, updateCallback){
+        this.$el = document.querySelector(selector);
+        this.update = updateCallback;
+        this.init();
+    }
+    init() {
+        this.$el.insertAdjacentHTML("afterbegin", this.template);
+        this.$el.addEventListener("submit", this.add.bind(this));
+    }
+    get template() {
+        return [
+            (0, _utilies.block)("text"),
+            (0, _utilies.block)("title")
+        ].join("");
+    }
+    add(event) {
+        event.preventDefault();
+        const type = event.target.name;
+        const value = event.target.value.value;
+        const styles = event.target.styles.value;
+        const newBlock = type === "text" ? new (0, _blocks.TextBlock)(value, {
+            styles
+        }) : new (0, _blocks.TitleBlock)(value, {
+            styles
+        });
+        this.update(newBlock);
+    }
+}
+
+},{"../utilies":"a1j0Y","./blocks":"gMfMj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["1RB6v","8lqZg"], "8lqZg", "parcelRequire5634")
 
 //# sourceMappingURL=index.975ef6c8.js.map
